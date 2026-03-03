@@ -114,6 +114,17 @@
     "wait-on": "^7.2.0",
     "web-streams-polyfill": "^4.2.0"
   },
+  "overrides": {
+    "face-api.js": {
+      "@tensorflow/tfjs-core": {
+        "node-fetch": "2.7.0"
+      }
+    },
+    "@marp-team/marp-core": {
+      "markdown-it": "14.1.1"
+    },
+    "serialize-javascript": "7.0.4"
+  },
   "engines": {
     "node": "24.x"
   }
