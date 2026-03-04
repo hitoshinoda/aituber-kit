@@ -253,11 +253,19 @@ export function useBrowserSpeechRecognition(
             }
             timeoutId = setTimeout(() => {
               recognition.removeEventListener('end', onEndHandler)
-              console.log('Recognition active wait timeout, forcing resolve')
-              resolve()
+              console.log('Recognition active wait timeout, forcing abort')
+              try {
+                recognition.abort()
+              } catch {
+                // ignore abort errors
+              }
+              // Brief pause to allow the browser to process the abort
+              setTimeout(resolve, 100)
             }, 500)
             recognition.addEventListener('end', onEndHandler)
           })
+          // Ensure the active flag is cleared (onend from abort fires asynchronously)
+          recognitionActiveRef.current = false
         }
 
         recognition.start()
