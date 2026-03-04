@@ -73,10 +73,9 @@ const useExternalLinkage = ({ handleReceiveTextFromWs }: Params) => {
       onClose: handleClose,
     }
 
-    const wsManager = webSocketStore.getState().wsManager
-
     function connectWebsocket() {
-      if (wsManager?.isConnected()) return wsManager.websocket
+      const current = webSocketStore.getState().wsManager
+      if (current?.isConnected()) return current.websocket
       return new WebSocket('ws://localhost:8000/ws')
     }
 
@@ -84,15 +83,23 @@ const useExternalLinkage = ({ handleReceiveTextFromWs }: Params) => {
 
     const reconnectInterval = setInterval(() => {
       const ss = settingsStore.getState()
+      if (!ss.externalLinkageMode) return
+
+      const currentManager = webSocketStore.getState().wsManager
+      if (!currentManager) {
+        // No manager at all — create one (handles first-render null capture case)
+        webSocketStore.getState().initializeWebSocket(t, handlers, connectWebsocket)
+        return
+      }
+
       if (
-        ss.externalLinkageMode &&
-        wsManager?.websocket &&
-        wsManager.websocket.readyState !== WebSocket.OPEN &&
-        wsManager.websocket.readyState !== WebSocket.CONNECTING
+        currentManager.websocket &&
+        currentManager.websocket.readyState !== WebSocket.OPEN &&
+        currentManager.websocket.readyState !== WebSocket.CONNECTING
       ) {
         homeStore.setState({ chatProcessing: false })
         console.log('try reconnecting...')
-        wsManager.disconnect()
+        currentManager.disconnect()
         webSocketStore
           .getState()
           .initializeWebSocket(t, handlers, connectWebsocket)

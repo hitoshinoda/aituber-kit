@@ -778,6 +778,22 @@ const settingsStore = create<SettingsState>()(
   exclusivityMiddleware(
     persist((set, get) => getInitialValuesFromEnv(), {
       name: 'aitube-kit-settings',
+      // merge runs before set() commits — overrides here are effective immediately.
+      // This fixes the race where onRehydrateStorage fires after hydration has
+      // already committed, so mutations to `state` inside it had no effect on
+      // the actual store when selectVoice was persisted from a previous session.
+      merge: (persistedState, currentState) => {
+        const merged: SettingsState = {
+          ...currentState,
+          ...(persistedState as Partial<SettingsState>),
+        }
+        // Always override selectVoice from env regardless of what was persisted.
+        // Old localStorage may contain selectVoice: 'google' from a prior session.
+        if (process.env.NEXT_PUBLIC_SELECT_VOICE) {
+          merged.selectVoice = process.env.NEXT_PUBLIC_SELECT_VOICE as AIVoice
+        }
+        return merged
+      },
       onRehydrateStorage: () => (state) => {
         // Migrate OpenAI model names when loading from storage
         if (
@@ -794,6 +810,11 @@ const settingsStore = create<SettingsState>()(
         // Force modelType away from live2d when Live2D is not enabled
         if (state && !isLive2DEnabled() && state.modelType === 'live2d') {
           state.modelType = 'vrm'
+        }
+
+        // Always override selectVoice from env (localStorage must not win here)
+        if (state && process.env.NEXT_PUBLIC_SELECT_VOICE) {
+          state.selectVoice = process.env.NEXT_PUBLIC_SELECT_VOICE as AIVoice
         }
 
         // Override with environment variables if the option is enabled
@@ -865,7 +886,7 @@ const settingsStore = create<SettingsState>()(
         selectAIService: state.selectAIService,
         selectAIModel: state.selectAIModel,
         localLlmUrl: state.localLlmUrl,
-        selectVoice: state.selectVoice,
+        // selectVoice is intentionally NOT persisted — always comes from NEXT_PUBLIC_SELECT_VOICE env
         koeiroParam: state.koeiroParam,
         googleTtsType: state.googleTtsType,
         voicevoxSpeaker: state.voicevoxSpeaker,
