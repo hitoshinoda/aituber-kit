@@ -1,0 +1,13 @@
+{
+  "apphosting": {
+    "backendId": "aivtuber-kit",
+    "rootDir": "/",
+    "ignore": [
+      "node_modules",
+      ".git",
+      ".env",
+      "firebase-debug.log",
+      "firebase-debug.*.log"
+    ]
+  }
+}

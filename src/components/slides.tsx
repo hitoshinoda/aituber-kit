@@ -102,18 +102,20 @@ const Slides: React.FC<SlidesProps> = ({ markdown }) => {
   }, [])
 
   const readSlide = useCallback(
-    (slideIndex: number) => {
-      const getCurrentLines = () => {
-        const scripts = require(
-          `../../public/slides/${selectedSlideDocs}/scripts.json`
+    async (slideIndex: number) => {
+      const getCurrentLines = async () => {
+        const response = await fetch(
+          `/slides/${selectedSlideDocs}/scripts.json`
         )
+        if (!response.ok) return ''
+        const scripts = await response.json()
         const currentScript = scripts.find(
           (script: { page: number }) => script.page === slideIndex
         )
         return currentScript ? currentScript.line : ''
       }
 
-      const currentLines = getCurrentLines()
+      const currentLines = await getCurrentLines()
       console.log(currentLines)
       speakMessageHandler(currentLines)
     },

@@ -1,0 +1,57 @@
+# Firebase App Hosting 設定ファイル
+# https://firebase.google.com/docs/app-hosting/configure
+
+# Cloud Run サービス設定
+runConfig:
+  cpu: 1
+  memoryMiB: 1024
+  minInstances: 0   # 0=コールドスタートあり、1以上=常時起動（コスト増）
+  maxInstances: 10
+  concurrency: 80
+
+# 環境変数
+# NEXT_PUBLIC_* は公開情報なので value で直接設定OK
+# APIキー等の秘密情報は secret で Cloud Secret Manager を参照
+env:
+  # ===== 基本設定 =====
+  - variable: NEXT_PUBLIC_SELECT_LANGUAGE
+    value: "ja"
+
+  # ===== AIサービス設定 =====
+  # 使用するAIサービスを指定（openai, anthropic, google, ollama, custom-api 等）
+  # - variable: NEXT_PUBLIC_DEFAULT_AI_SERVICE
+  #   value: "custom-api"
+  #   availability:
+  #     - BUILD
+  #     - RUNTIME
+
+  # ===== サーバーサイドAPIキー（シークレット）=====
+  # 使用するAPIキーのコメントを外し、firebase apphosting:secrets:set <KEY名> で登録してください
+  # - variable: OPENAI_API_KEY
+  #   secret: OPENAI_API_KEY
+  #   availability:
+  #     - RUNTIME
+  # - variable: ANTHROPIC_API_KEY
+  #   secret: ANTHROPIC_API_KEY
+  #   availability:
+  #     - RUNTIME
+  # - variable: GOOGLE_API_KEY
+  #   secret: GOOGLE_API_KEY
+  #   availability:
+  #     - RUNTIME
+  # - variable: AZURE_API_KEY
+  #   secret: AZURE_API_KEY
+  # - variable: XAI_API_KEY
+  #   secret: XAI_API_KEY
+  # - variable: GROQ_API_KEY
+  #   secret: GROQ_API_KEY
+  # - variable: ELEVENLABS_API_KEY
+  #   secret: ELEVENLABS_API_KEY
+  # - variable: CARTESIA_API_KEY
+  #   secret: CARTESIA_API_KEY
+  # - variable: OPENAI_TTS_KEY
+  #   secret: OPENAI_TTS_KEY
+
+  # ===== YouTube =====
+  # - variable: NEXT_PUBLIC_YOUTUBE_API_KEY
+  #   secret: NEXT_PUBLIC_YOUTUBE_API_KEY
