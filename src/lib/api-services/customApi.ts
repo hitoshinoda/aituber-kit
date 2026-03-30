@@ -125,7 +125,7 @@ export async function handleCustomApi(
         ? lastUserMsg.content
         : Array.isArray(lastUserMsg?.content)
           ? (
-              lastUserMsg.content.find((c: any) => c.type === 'text') as any
+              lastUserMsg?.content.find((c: any) => c.type === 'text') as any
             )?.text || ''
           : ''
 
