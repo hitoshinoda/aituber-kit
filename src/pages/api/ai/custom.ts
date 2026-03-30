@@ -29,12 +29,23 @@ export default async function handler(req: NextRequest) {
     customApiIncludeMimeType = false,
   } = await req.json()
 
+  // クライアントから送られたBodyが無効なJSONの場合、サーバー側の環境変数にフォールバック
+  const resolveBody = (clientValue: string): string => {
+    const candidate = clientValue === '' ? '{}' : clientValue
+    try {
+      JSON.parse(candidate)
+      return candidate
+    } catch {
+      return process.env.NEXT_PUBLIC_CUSTOM_API_BODY || '{}'
+    }
+  }
+
   try {
     return await handleCustomApi(
       messages,
       customApiUrl,
       customApiHeaders === '' ? '{}' : customApiHeaders,
-      customApiBody === '' ? '{}' : customApiBody,
+      resolveBody(customApiBody),
       stream,
       customApiIncludeMimeType
     )
