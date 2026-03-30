@@ -16,17 +16,141 @@ env:
   # ===== 基本設定 =====
   - variable: NEXT_PUBLIC_SELECT_LANGUAGE
     value: "ja"
+  - variable: NEXT_PUBLIC_CHANGE_ENGLISH_TO_JAPANESE
+    value: "false"
+  - variable: NEXT_PUBLIC_SHOW_INTRODUCTION
+    value: "false"
+  - variable: NEXT_PUBLIC_ALWAYS_OVERRIDE_WITH_ENV_VARIABLES
+    value: "true"
+  - variable: NEXT_PUBLIC_SHOW_ASSISTANT_TEXT
+    value: "true"
+  - variable: NEXT_PUBLIC_SHOW_CHARACTER_NAME
+    value: "true"
+  - variable: NEXT_PUBLIC_SHOW_CONTROL_PANEL
+    value: "true"
+  - variable: NEXT_PUBLIC_COLOR_THEME
+    value: "default"
+  - variable: NEXT_PUBLIC_RESTRICTED_MODE
+    value: "false"
+  - variable: NEXT_PUBLIC_LIVE2D_ENABLED
+    value: "false"
 
-  # ===== AIサービス設定 =====
-  # 使用するAIサービスを指定（openai, anthropic, google, ollama, custom-api 等）
-  # - variable: NEXT_PUBLIC_DEFAULT_AI_SERVICE
-  #   value: "custom-api"
-  #   availability:
-  #     - BUILD
-  #     - RUNTIME
+  # ===== キャラクター設定 =====
+  - variable: NEXT_PUBLIC_CHARACTER_NAME
+    value: "ニケちゃん"
+  - variable: NEXT_PUBLIC_USER_DISPLAY_NAME
+    value: "YOU"
+  - variable: NEXT_PUBLIC_MODEL_TYPE
+    value: "vrm"
+  - variable: NEXT_PUBLIC_SELECTED_VRM_PATH
+    value: "/vrm/nikechan_v2.vrm"
+  - variable: NEXT_PUBLIC_SELECTED_LIVE2D_PATH
+    value: "/live2d/nike01/nike01.model3.json"
+  - variable: NEXT_PUBLIC_SELECTED_PNGTUBER_PATH
+    value: "/pngtuber/nike01"
+  - variable: NEXT_PUBLIC_LIGHTING_INTENSITY
+    value: "1.0"
+  - variable: NEXT_PUBLIC_BACKGROUND_IMAGE_PATH
+    value: "/backgrounds/bg-c.png"
+
+  # ===== AI設定 =====
+  - variable: NEXT_PUBLIC_SELECT_AI_SERVICE
+    value: "custom-api"
+  - variable: NEXT_PUBLIC_SELECT_AI_MODEL
+    value: "custom"
+  - variable: NEXT_PUBLIC_MAX_PAST_MESSAGES
+    value: "10"
+  - variable: NEXT_PUBLIC_TEMPERATURE
+    value: "0.7"
+  - variable: NEXT_PUBLIC_MAX_TOKENS
+    value: "4096"
+  - variable: NEXT_PUBLIC_REASONING_MODE
+    value: "false"
+  - variable: NEXT_PUBLIC_SHOW_THINKING_TEXT
+    value: "false"
+  - variable: NEXT_PUBLIC_ENABLE_MULTIMODAL
+    value: "true"
+  - variable: NEXT_PUBLIC_MULTIMODAL_MODE
+    value: "ai-decide"
+  - variable: NEXT_PUBLIC_CUSTOM_MODEL
+    value: "false"
+
+  # ===== カスタムAPI設定 =====
+  - variable: NEXT_PUBLIC_CUSTOM_API_URL
+    value: "https://wordmarket.sakura.ne.jp/Sheprd/2026_0330_Edy/Choco.cgi"
+  - variable: NEXT_PUBLIC_CUSTOM_API_HEADERS
+    value: "{}"
+  - variable: NEXT_PUBLIC_CUSTOM_API_BODY
+    secret: NEXT_PUBLIC_CUSTOM_API_BODY
+    availability:
+      - BUILD
+      - RUNTIME
+  - variable: NEXT_PUBLIC_CUSTOM_API_INCLUDE_MIME_TYPE
+    value: "false"
+  - variable: NEXT_PUBLIC_INCLUDE_SYSTEM_MESSAGES_IN_CUSTOM_API
+    value: "true"
+
+  # ===== リアルタイムAPI設定 =====
+  - variable: NEXT_PUBLIC_REALTIME_API_MODE
+    value: "false"
+  - variable: NEXT_PUBLIC_EXTERNAL_LINKAGE_MODE
+    value: "false"
+  - variable: NEXT_PUBLIC_AUDIO_MODE
+    value: "false"
+
+  # ===== 音声合成設定 =====
+  - variable: NEXT_PUBLIC_SELECT_VOICE
+    value: "openai"
+  - variable: NEXT_PUBLIC_SPEECH_RECOGNITION_MODE
+    value: "browser"
+  - variable: NEXT_PUBLIC_INITIAL_SPEECH_TIMEOUT
+    value: "5.0"
+  - variable: NEXT_PUBLIC_NO_SPEECH_TIMEOUT
+    value: "2.0"
+  - variable: NEXT_PUBLIC_SHOW_SILENCE_PROGRESS_BAR
+    value: "true"
+  - variable: NEXT_PUBLIC_CONTINUOUS_MIC_LISTENING_MODE
+    value: "true"
+
+  # ===== YouTube設定 =====
+  - variable: NEXT_PUBLIC_YOUTUBE_MODE
+    value: "false"
+
+  # ===== その他UI設定 =====
+  - variable: NEXT_PUBLIC_SHOW_QUICK_MENU
+    value: "true"
+  - variable: NEXT_PUBLIC_SHOW_PRESET_QUESTIONS
+    value: "false"
+  - variable: NEXT_PUBLIC_MESSAGE_RECEIVER_ENABLED
+    value: "false"
+  - variable: NEXT_PUBLIC_USE_VIDEO_AS_BACKGROUND
+    value: "false"
+  - variable: NEXT_PUBLIC_INCLUDE_TIMESTAMP_IN_USER_MESSAGE
+    value: "false"
+  - variable: NEXT_PUBLIC_CHAT_LOG_WIDTH
+    value: "400"
+  - variable: NEXT_PUBLIC_SLIDE_MODE
+    value: "false"
+
+  # ===== 人感検知設定 =====
+  - variable: NEXT_PUBLIC_PRESENCE_DETECTION_ENABLED
+    value: "false"
+
+  # ===== アイドルモード設定 =====
+  - variable: NEXT_PUBLIC_IDLE_MODE_ENABLED
+    value: "false"
+
+  # ===== キオスクモード設定 =====
+  - variable: NEXT_PUBLIC_KIOSK_MODE_ENABLED
+    value: "false"
+
+  # ===== メモリ機能設定 =====
+  - variable: NEXT_PUBLIC_MEMORY_ENABLED
+    value: "false"
 
   # ===== サーバーサイドAPIキー（シークレット）=====
-  # 使用するAPIキーのコメントを外し、firebase apphosting:secrets:set <KEY名> で登録してください
+  # 使用する場合は setup-firebase-secrets.sh でシークレットを登録後コメントを外す
+
   # - variable: OPENAI_API_KEY
   #   secret: OPENAI_API_KEY
   #   availability:
@@ -41,17 +165,61 @@ env:
   #     - RUNTIME
   # - variable: AZURE_API_KEY
   #   secret: AZURE_API_KEY
+  #   availability:
+  #     - RUNTIME
   # - variable: XAI_API_KEY
   #   secret: XAI_API_KEY
+  #   availability:
+  #     - RUNTIME
   # - variable: GROQ_API_KEY
   #   secret: GROQ_API_KEY
+  #   availability:
+  #     - RUNTIME
+  # - variable: COHERE_API_KEY
+  #   secret: COHERE_API_KEY
+  #   availability:
+  #     - RUNTIME
+  # - variable: MISTRALAI_API_KEY
+  #   secret: MISTRALAI_API_KEY
+  #   availability:
+  #     - RUNTIME
+  # - variable: PERPLEXITY_API_KEY
+  #   secret: PERPLEXITY_API_KEY
+  #   availability:
+  #     - RUNTIME
+  # - variable: FIREWORKS_API_KEY
+  #   secret: FIREWORKS_API_KEY
+  #   availability:
+  #     - RUNTIME
+  # - variable: DEEPSEEK_API_KEY
+  #   secret: DEEPSEEK_API_KEY
+  #   availability:
+  #     - RUNTIME
+  # - variable: OPENROUTER_API_KEY
+  #   secret: OPENROUTER_API_KEY
+  #   availability:
+  #     - RUNTIME
+  # - variable: DIFY_API_KEY
+  #   secret: DIFY_API_KEY
+  #   availability:
+  #     - RUNTIME
   # - variable: ELEVENLABS_API_KEY
   #   secret: ELEVENLABS_API_KEY
+  #   availability:
+  #     - RUNTIME
   # - variable: CARTESIA_API_KEY
   #   secret: CARTESIA_API_KEY
+  #   availability:
+  #     - RUNTIME
   # - variable: OPENAI_TTS_KEY
   #   secret: OPENAI_TTS_KEY
-
-  # ===== YouTube =====
-  # - variable: NEXT_PUBLIC_YOUTUBE_API_KEY
-  #   secret: NEXT_PUBLIC_YOUTUBE_API_KEY
+  #   availability:
+  #     - RUNTIME
+  # - variable: AZURE_TTS_KEY
+  #   secret: AZURE_TTS_KEY
+  #   availability:
+  #     - RUNTIME
+  # - variable: AIVIS_CLOUD_API_KEY
+  #   secret: AIVIS_CLOUD_API_KEY
+  #   availability:
+  #     - RUNTIME
